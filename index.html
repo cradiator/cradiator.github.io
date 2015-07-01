@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>sysdbg.com</title>
+  <meta name="author" content="cradiator">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="sysdbg.com"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="sysdbg.com" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">sysdbg.com</a></h1>
+  <h2><a href="/"></a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-07-01T03:54:42.000Z"><a href="/2015/07/01/Node-customization-in-Graphviz/">2015-07-01</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/07/01/Node-customization-in-Graphviz/">在Graphviz中定义节点形状</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h2 id="polygon_based_shape">polygon based shape</h2><p>默认状态下Graphviz画出的节点都是椭圆形。<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">digraph <span class="keyword">G</span> &#123;</span><br><span class="line">   <span class="keyword">label</span>=<span class="string">"default node shape is ellipse"</span>;</span><br><span class="line">   A;B;C;<span class="keyword">D</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><img src="/2015/07/01/Node-customization-in-Graphviz/default_node_shape.png" alt="default_node_shape.png" title=""></p>
+<p><br><br>Graphviz提供了多种节点形状，可以通过编辑shape属性改变节点形状。<br><figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">digraph G &#123;</span><br><span class="line">   label=<span class="string">"change node shape"</span>;</span><br><span class="line"></span><br><span class="line">   node[<span class="built_in">shape</span>=<span class="built_in">box</span>];   <span class="comment">// change default shape to box</span></span><br><span class="line">   A;B;               <span class="comment">// use default shape</span></span><br><span class="line">   C[<span class="built_in">shape</span>=<span class="built_in">triangle</span>]; <span class="comment">// C is triangle</span></span><br><span class="line">   D[<span class="built_in">shape</span>=star];     <span class="comment">// D is a star</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><img src="/2015/07/01/Node-customization-in-Graphviz/change_node_shape.png" alt="change_node_shape.png" title=""></p>
+<p>使用node关键字会改变节点的默认值。代码第4行，将默认形状改为方形(box)，这个值将影响它之后出现的所有节点。第5行创建了A、B两个节点。由于他们出现在默认值变为box之后，并且没有指定形状，所以它们都是方形。</p>
+<p>像6、7行那样直接指定节点形状则不受默认值影响。</p>
+<p>这种直接指定在shape中的形状叫做polygon-based shape。可以在<a href="http://www.graphviz.org/content/node-shapes#polygon" target="_blank" rel="external">http://www.graphviz.org/content/node-shapes#polygon</a> 看到完整的列表。<br><img src="/2015/07/01/Node-customization-in-Graphviz/polygon_based_shape.png" alt="polygon_based_shape.png" title=""></p>
+<h2 id="record_based_shape">record based shape</h2><p>polygen based shape用来画简单框图。graphviz为复杂数据提供了record based shape。这种shape以类似表格的方式绘制节点，特别适合绘制数据结构。</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">digraph G &#123;</span><br><span class="line">   <span class="variable">label=</span><span class="string">"record based shape"</span></span><br><span class="line"></span><br><span class="line">  A[<span class="variable">shape=</span>record, <span class="variable">label=</span><span class="string">"1|2|3"</span>]</span><br><span class="line">  B[<span class="variable">shape=</span>record, <span class="variable">label=</span><span class="string">"4|5"</span>]</span><br><span class="line"></span><br><span class="line">  A-&gt;B</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/2015/07/01/Node-customization-in-Graphviz/record_based_shape.png" alt="record_based_shape.png" title="">
+<p>A和B的shape都为record。record节点的结构会根据label的值生成。如A节点label为“1|2|3”会把节点横向三等分，分别填入1、2、3三个元素。<br><br><br>如果希望把节点纵向分割，可以用{}包围起来。 如 “{1|2|3}”就是一个纵向三等分。<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">digraph G &#123;</span><br><span class="line">  A[<span class="variable">shape=</span>record, <span class="variable">label=</span><span class="string">"&#123;1|2|3&#125;"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><img src="/2015/07/01/Node-customization-in-Graphviz/record_based_shape2.png" alt="record_based_shape2.png" title=""><br><br><br>{}包围起来的元素会改变分割的方向，并支持嵌套。不被包围的元素按横向分割，嵌套一次变成纵向，嵌套两次变回横向，以此类推。例如：<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">digraph G &#123;</span><br><span class="line">  A[<span class="variable">shape=</span>record, <span class="variable">label=</span><span class="string">"1|&#123;2|&#123;3|4&#125;&#125;|5"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><img src="/2015/07/01/Node-customization-in-Graphviz/record_based_shape3.png" alt="record_based_shape3.png" title=""></p>
+<h2 id="为数据命名">为数据命名</h2><p>先看一幅图<br><img src="/2015/07/01/Node-customization-in-Graphviz/record_based_shape4.png" alt="record_based_shape4.png" title=""></p>
+<p>可以控制节点的结构，自然就要控制边的起止。比如上图, left,mid,right是同一个节点的三个元素，要如何控制三个指向I’m xxx的边的起始位置呢。来看代码<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">digraph <span class="constant">G</span> &#123;</span><br><span class="line">  node[shape=record]</span><br><span class="line"></span><br><span class="line">  <span class="constant">A</span>[label=<span class="string">"&lt;l&gt;left|&lt;m&gt;mid|&lt;r&gt;right"</span>]</span><br><span class="line">  <span class="constant">B</span>[label=<span class="string">"I'm left"</span>]</span><br><span class="line">  <span class="constant">C</span>[label=<span class="string">"I'm mid"</span>]</span><br><span class="line">  <span class="constant">D</span>[label=<span class="string">"I'm right"</span>]</span><br><span class="line"></span><br><span class="line">  <span class="constant">A</span><span class="symbol">:l-&gt;B</span></span><br><span class="line">  <span class="constant">A</span><span class="symbol">:m-&gt;C</span></span><br><span class="line">  <span class="constant">A</span><span class="symbol">:r-&gt;D</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>graphviz允许给record中每一个元素命名，元素的名称可以写在&lt;&gt;中。A节点”<l>left|<m>mid|<r>right”, 有三个元素left, mid, right分别被命名为l, m, r。这些名字被写在&lt;&gt;中。<br>于是定义边的时候就可以引用这些名称了。如A:l-&gt;B的意思就是从”A中的left元素”画一条边到B。</r></m></l></p>
+<p>最后来个稍微复杂一点的例子<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="label">digraph</span> G &#123;</span><br><span class="line">  node [shape<span class="label">=record</span>]<span class="comment">;</span></span><br><span class="line">  <span class="keyword">struct1 </span>[shape<span class="label">=record</span>,label=<span class="string">" left|&lt;f1&gt;middle|&lt;f2&gt;right"</span>]<span class="comment">;</span></span><br><span class="line">  <span class="keyword">struct2 </span>[shape<span class="label">=record</span>,label=<span class="string">" one|&lt;f0&gt;two"</span>]<span class="comment">; </span></span><br><span class="line">  <span class="keyword">struct3 </span>[shape<span class="label">=record</span>,label=<span class="string">"hello\nworld|&#123; b |&#123;c|&lt;here&gt;d|e&#125;| f&#125;| g | h"</span>]<span class="comment">;</span></span><br><span class="line"><span class="label">  struct1:</span><span class="literal">f1</span> -&gt; <span class="keyword">struct2:f0;</span><br><span class="line"></span><span class="label">  struct1:</span><span class="literal">f2</span> -&gt; <span class="keyword">struct3:here;</span><br><span class="line"></span>&#125;</span><br></pre></td></tr></table></figure><br><img src="/2015/07/01/Node-customization-in-Graphviz/record_based_shape5.png" alt="record_based_shape5.png" title=""></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-06-26T11:02:07.000Z"><a href="/2015/06/26/drawing-class-diagram-with-graphviz/">2015-06-26</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/06/26/drawing-class-diagram-with-graphviz/">使用graphviz画类图</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>Graphviz是贝尔实验室几位大牛搞出来所谓“所想即所得”的画图软件。说白了就是像写程序一样编写图的”源代码”，用Graphviz把源代码编译成图片。</p>
+<p>这种画图的语言叫DOT，试用后感觉很适合程序员。因为我们在画图时大多希望传达的是结构、顺序、关系等逻辑信息。只要能把逻辑表达清楚，方块应该放到什么地方，线应该怎么连并不重要。Graphviz正是这么一种软件——我们只需在DOT中描述图的逻辑。布局、连线等工作全部交给软件去做。</p>
+<p>这里记录一种画流程图的方法。</p>
+<img src="/2015/06/26/drawing-class-diagram-with-graphviz/cat_dog.png" alt="图1" title="图1">
+<p>图1可以用下面的代码生成<br><a href="/2015/06/26/drawing-class-diagram-with-graphviz/cat_dog.gv" title="cat_dog.gv">cat_dog.gv</a><br><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">digraph G &#123;</span><br><span class="line">    // default attributes</span><br><span class="line">    node<span class="comment">[shape=record]</span></span><br><span class="line">    edge<span class="comment">[dir=both, arrowtail=normal, arrowhead=none]</span></span><br><span class="line"></span><br><span class="line">    // node delaration</span><br><span class="line">    <span class="keyword">Animal</span><span class="comment">[label="&#123;Animal|+eat():void\n+sleep():void&#125;"]</span></span><br><span class="line">    Cat<span class="comment">[label="&#123;Cat|+mew():void&#125;"]</span></span><br><span class="line">    Dog<span class="comment">[label="&#123;Dog|+bark():void&#125;"]</span></span><br><span class="line"></span><br><span class="line">    // edge</span><br><span class="line">    <span class="keyword">Animal</span>-&gt;Cat</span><br><span class="line">    <span class="keyword">Animal</span>-&gt;Dog</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一个DOT源码由三部分组成——graph, node和edge。整幅图就是一个graph, 图中的节点就node，边就是edge。</p>
+<ul>
+<li>1行生成了一个名称叫做G的有向图(digraph), 大括号里面就是对这个图的描述。</li>
+<li>3-4行中的node和edge是关键字，分别用来修改节点和边的默认属性。属性出现在中括号中,都是key-value组合。</li>
+<li>7-9行生成Animal, Cat和Dog三个节点, label属性显示的文字，如果不存在就是显示节点名。</li>
+<li>12-13生成链接Animal — Cat, Animal — Dog 的两条边。</li>
+</ul>
+<h2 id="arrowtail和arrowhead">arrowtail和arrowhead</h2><p>第4行edge中, arrowtail和arrowhead都是用来调整边中箭头的显示方式。首先<strong>所有的边都是从tail连接到head的</strong>。<br>比如Animal-&gt;Cat这条边, Animal就是tail, Cat就是head。这一点和日常理解有所不同。<br>arrortail和arrorhead用来修改tail和head的箭头样式, 可以从官网查看到全部的样式<br><a href="http://www.graphviz.org/content/attrs#karrowType" target="_blank" rel="external">http://www.graphviz.org/content/attrs#karrowType</a><br><img src="/2015/06/26/drawing-class-diagram-with-graphviz/arrow_type.png" alt="箭头样式" title="箭头样式"></p>
+<h2 id="dir">dir</h2><p>试验后你会发现, 无论arrowtail指定什么值箭头都不会显示。这是因为默认情况下arrowtail就是不显示的，这是由dir属性控制的。<br>dir可以取四种值forword, back, both和none。分别代表只显示arrowhead, 只显示arrowtail，arrowhead和arrowtail都显示, arrowhead和arrowtail都不显示。如下图<br><img src="/2015/06/26/drawing-class-diagram-with-graphviz/dir.png" alt="dir属性" title="dir属性"></p>
+<h2 id=""><br></h2><p>最后,node中的shape=record是用来控制节点显示方式的, 比较复杂。后面再讲。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2015-06-25T14:27:24.000Z"><a href="/2015/06/25/Hello-World/">2015-06-25</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2015/06/25/Hello-World/">Hello World</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">"你好,世界!\n"</span>);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+
+<nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav></div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:www.sysdbg.com">
+  </form>
+</div>
+
+  
+
+  
+<div class="widget tag">
+  <h3 class="title">标签</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/graphviz/">graphviz</a><small>2</small></li>
+  
+  </ul>
+</div>
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2015 cradiator<br />cradiator@gmail.com
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
